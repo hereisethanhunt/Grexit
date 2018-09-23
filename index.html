@@ -1,0 +1,55 @@
+
+<div class="header"><h1> Tic Tac @ Hiver</h1></div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center">Tic-Tac-Toe</h4>
+      </div>
+      <div class="modal-body">
+        <h3>Welcome to Tic-Tac-Toe</h3>
+        <p>It’s time USER-1 choose your figure.</p>
+        <p id="test"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="x" class="btn" data-dismiss="modal" onClick="setFig(this.id)"><span class="fa fa-times"><span></button>
+        <button type="button" id="o" class="btn" data-dismiss="modal" onClick="setFig(this.id)"><span class="fa fa-circle-o"><span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal_winner" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+      <div class="modal-body">
+        <h3>Winner Is</h3>
+        <p id="winner_name"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="parentTop">
+    <div class="gridTop">
+        <div id="grid">
+
+        </div>
+    </div>
+</div>
+
+
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./index.css">
+
+<!-- Script -->
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./index.js" ></script>
