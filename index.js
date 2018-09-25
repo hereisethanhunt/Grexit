@@ -19,9 +19,12 @@
  * 
  */
 let grid = [];
-const GRID_LENGTH = 3;
-let turn = 'X';
-var allowed_val = [1,1,1,1,1,1,1,1,1];
+const GRID_LENGTH = 5;
+//const GRID_LENGTH = 3;
+var allowed_val = [];
+
+for (var i = 0; i < (GRID_LENGTH*GRID_LENGTH); i++) allowed_val[i] = 1;
+
 
 function initializeGrid() {
     $('#myModal').modal('show');
@@ -78,17 +81,17 @@ function onBoxClick() {
     var rowIdx = this.getAttribute("rowIdx");
     var colIdx = this.getAttribute("colIdx");
     
-    allowed_val[parseInt(rowIdx) + parseInt(colIdx)*3] = 0;
+    allowed_val[parseInt(rowIdx) + parseInt(colIdx)*GRID_LENGTH] = 0;
 
     if(game.currentPlayer == "user_one_array")
     {
          grid[colIdx][rowIdx] = game.user_one;
-         game.user_one_array[(parseInt(colIdx)*3) + parseInt(rowIdx)] = 1;    
+         game.user_one_array[(parseInt(colIdx)*GRID_LENGTH) + parseInt(rowIdx)] = 1;    
     }
     else
     {
         grid[colIdx][rowIdx] = game.user_two; 
-        game.user_two_array[(parseInt(colIdx)*3)+parseInt(rowIdx)] = 1;   
+        game.user_two_array[(parseInt(colIdx)*GRID_LENGTH)+parseInt(rowIdx)] = 1;   
     }
    
     renderMainGrid();
@@ -116,58 +119,77 @@ function addClickHandlers() {
 
     }
 
-    if(game.moves === 9)
-    {
-        document.getElementById("winner_name").innerHTML = "Ended in Draw";
-            $('#myModal_winner').modal('show');
-            
-            setTimeout(function(){
-                window.location.reload(1);
-            }, 1000);
-    }
-
 }
 
 function checkWinner(elem, user){
 
-    if(game[elem][0] === 1 && game[elem][1] === 1 && game[elem][2] === 1)
+        let win_flag = 0;
+   
+        for(var i=0; (i<GRID_LENGTH) && (win_flag===0); i++) // checking row and column win condition
         {
-            resetGame(user); 
+            let condition_row = 0;
+            let condition_column = 0;
+            for(var j=0; j< GRID_LENGTH;j++)
+            {
+                if(game[elem][ j + (GRID_LENGTH*i) ] === 1) // each row win condition
+                {
+                    condition_row+=1;
+                }
+
+                if(game[elem][ i + (GRID_LENGTH*j) ] === 1) // each column win condition
+                {
+                    condition_column+=1;
+                }
+            }
+
+            if(condition_row === GRID_LENGTH || condition_column === GRID_LENGTH)
+            {
+                win_flag = 1;
+                break;
+            }
         }
-        else if(game[elem][3] === 1 && game[elem][4] === 1 && game[elem][5] === 1)
+
+        let condition_rightDiag = 0;
+        for(var j=1; (j<= GRID_LENGTH) && (win_flag===0); j++) // right diagonal win condition
         {
-           resetGame(user);
+            if(game[elem][ j* (GRID_LENGTH-1) ] === 1)
+            {
+                condition_rightDiag+=1;
+            }
         }
-        else if(game[elem][6] === 1 && game[elem][7] === 1 && game[elem][8] === 1)
+        if(condition_rightDiag === GRID_LENGTH)
         {
-            resetGame(user);
-        }
-        else if(game[elem][0] === 1 && game[elem][4] === 1 && game[elem][8] === 1)
-        {
-            resetGame(user);
-        }
-        else if(game[elem][2] === 1 && game[elem][4] === 1 && game[elem][6] === 1)
-        {
-            resetGame(user);
-        }
-        else if(game[elem][0] === 1 && game[elem][3] === 1 && game[elem][6] === 1)
-        {
-            resetGame(user);
-        }
-        else if(game[elem][1] === 1 && game[elem][4] === 1 && game[elem][7] === 1)
-        {
-            resetGame(user);
-        }
-        else if(game[elem][2] === 1 && game[elem][5] === 1 && game[elem][8] === 1)
-        {
-            resetGame(user);
-        }
+            win_flag = 1;
+        }    
     
+
+        let condition_leftDiag = 0;
+        for(var j=0; (j< GRID_LENGTH) && (win_flag===0); j++) // left diagonal win condition
+        {
+            if(game[elem][ j* (GRID_LENGTH+1) ] === 1)
+            {
+                condition_leftDiag+=1;
+            }
+        }
+        if(condition_leftDiag === GRID_LENGTH)
+        {
+            win_flag = 1;
+        }
+
+        if(game.moves === (GRID_LENGTH*GRID_LENGTH)-1 && win_flag === 0)  // if game draw 
+        {
+            resetGame("Nobody");
+        }
+        else if(win_flag === 1)
+        {
+            resetGame(user);
+        }    
+
 }
 
 function resetGame(user)
 {
-            document.getElementById("winner_name").innerHTML = user;
+            document.getElementById("winner_name").innerHTML = user + " Wins!";
             $('#myModal_winner').modal('show');
             
             setTimeout(function(){
@@ -183,8 +205,8 @@ var game = {
   user_two: 2,
   currentPlayer: 'user_one_array',
   moves: 0,
-  user_one_array : [0,0,0,0,0,0,0,0,0],
-  user_two_array : [0,0,0,0,0,0,0,0,0]
+  user_one_array : [],
+  user_two_array : []
 };
 
 function setFig(id)
